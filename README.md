@@ -1,135 +1,143 @@
-# 嵌入式项目开发模板
+# 嵌入式项目开发治理
 
-一个面向 AI 辅助嵌入式固件开发的轻量、可复用工作流。
+一个让 AI 以最小、受控、可验证方式参与嵌入式固件开发的 Agent Skill。
 
-## 它解决什么问题
+## 功能
 
-AI 辅助嵌入式开发时，常见问题包括：
+- 调查项目结构、构建方式和已有能力；
+- 支持简单模式与结构化任务模式；
+- 根据风险选择必要的工作流程；
+- 标记无法从项目确认的事实为 `UNKNOWN`；
+- 识别生成代码边界并优先复用已有驱动、BSP、SDK、HAL 和 RTOS 能力；
+- 在明确授权后实施最小变更；
+- 记录构建、主机、目标硬件验证证据和剩余风险；
+- 提供项目治理文件模板和初始化脚本。
 
-- 一个简单需求被扩展成过大的架构；
-- AI 猜测芯片、板卡、引脚或 Flash 信息；
-- 直接修改 IDE 生成文件；
-- 把编译通过当成硬件功能完成；
-- 忽略超时、边界、并发所有权和失败恢复；
-- 任务结束后没有可复现的验证证据。
+## 适用场景
 
-这个模板帮助 AI 在修改前调查项目，优先复用已有能力，根据风险选择流程深度，在获得授权后实施最小变更，并根据真实构建、主机和目标板结果完成收尾。
+- 新项目接入和平台 bring-up；
+- UART、SPI、I2C、CAN、Ethernet 等外设开发；
+- Boot、Flash/NVM、OTA 和看门狗；
+- DMA、ISR、RTOS 任务和共享缓冲区；
+- 协议、公共接口和兼容性修改；
+- 故障修复、异常恢复和目标硬件验收。
 
-它不替代芯片规格、硬件判断、IDE 操作、烧录或目标板验证。
+它不替代芯片规格、硬件判断、IDE 构建、烧录或目标板测试。
 
-## 两种使用方式
-
-同一个工作流支持简单模式和结构化任务模式（Structured Issue）。两种模式最后都遵循：
+## 工作流程
 
 ```text
 调查 → 最小方案 → 明确授权 → 实现 → 实际验证 → 记录结果
 ```
 
-### 简单模式：适合新手和快速开始
+## 使用方式
 
-你只需要提供：
+### 简单模式
+
+适合新手和快速开始，只需提供项目路径、目标或现象：
 
 ```text
-项目路径：C:\work\firmware
+$embedded-project-governance
+项目路径：C:\\work\\firmware
 目标或现象：我想增加串口接收，但当前配置不清楚。
 请先调查，不要修改代码。
 ```
 
-AI 会自行检查工程结构、构建方式、已有驱动、生成代码边界和可从资料确认的事实。你不需要预先知道所有约束；只有无法从项目发现、且会改变方案、风险或验收的问题才需要你确认。
+AI 会先检查工程结构、构建方式、已有驱动和可确认事实。只有无法从项目发现、且会改变设计、风险或验收的问题才需要你确认。
 
-### 结构化任务模式（Structured Issue）：适合复杂和高风险任务
+### 结构化任务模式
 
-```text
-目标（Goal）：<可观察结果>
-范围（Scope）：<文件、模块或边界>
-当前问题（Problem）：<现象或原因>
-参考（Reference）：<可复用的实现或文档>
-限制（Constraints）：<不可修改项、资源、安全或兼容性限制>
-验收（Acceptance）：<如何观察成功>
-```
-
-缺少的字段可以写为 `UNKNOWN`。结构化输入会减少探索范围，但不会跳过调查、风险判断和授权门禁。
-
-当任务涉及公共接口、协议、持久化、并发、生成配置、Flash/NVM、启动或其他硬件风险时，建议使用这种模式。
-
-## 什么时候使用
-
-适合：
-
-- 新项目接入和平台 bring-up；
-- UART、SPI、I2C、CAN、Ethernet 等外设开发；
-- Boot、Flash/NVM、OTA、看门狗和启动流程；
-- DMA、ISR、RTOS 任务和共享缓冲区；
-- 协议、公共接口和兼容性修改；
-- 故障修复、异常恢复和目标硬件验收。
-
-不适合：
-
-- 纯粹的一次性脚本或与嵌入式无关的任务；
-- 只需要简单文本编辑的工作；
-- 期望 skill 自动替代硬件规格、烧录器或工程师判断的场景。
-
-## 安装 skill
-
-推荐直接让 Codex 安装 GitHub 仓库：
+适合复杂或高风险任务：
 
 ```text
-请使用 $skill-installer 从 https://github.com/crichars/embedded-project-governance 安装这个 skill。
+目标：<可观察结果>
+范围：<文件、模块或边界>
+当前问题：<现象或原因>
+参考：<已有实现或文档>
+限制：<不可修改项、资源或兼容性限制>
+验收：<如何观察成功>
 ```
 
-也可以在 PowerShell 中手动安装到用户级 skills 目录：
-
-```powershell
-git clone https://github.com/crichars/embedded-project-governance "$HOME\.agents\skills\embedded-project-governance"
-```
-
-Codex 会自动发现新安装的 skill；如果没有出现，重启 Codex。使用时可以输入 `$embedded-project-governance` 显式调用，也可以直接描述符合其适用范围的嵌入式开发任务。
-
-安装 skill 后，在具体工程中运行初始化脚本，把项目规则复制到目标工程：
-
-## 初始化项目
-
-```powershell
-cd "$HOME\.agents\skills\embedded-project-governance"
-.\scripts\init-project.ps1 -ProjectPath C:\work\my-firmware
-```
-
-默认保留目标目录中的已有文件。只有确认覆盖范围后才使用 `-Force`。
-
-初始化后，先让 AI 读取 `AGENTS.md` 和 `PROJECT.md`，再开始任务。项目事实可以逐步补充；未知内容使用 `UNKNOWN`，不要猜测。
+不知道的内容写 `UNKNOWN`。结构化输入会减少探索范围，但不会跳过调查、风险判断和授权门禁。Claude Code 使用时，将第一行替换为 `/embedded-project-governance`。
 
 ## 文件结构
 
 ```text
 embedded-project-governance/
-├─ SKILL.md                  # skill 触发和通用工作流
-├─ agents/openai.yaml        # skill 展示元数据
+├─ SKILL.md
+├─ agents/openai.yaml
 ├─ project-template/
-│  ├─ AGENTS.md              # 项目持续遵守的 AI 开发规则
-│  ├─ PROJECT.md             # 项目事实、约束和未知项
-│  ├─ .ai-governance/        # 能力和治理元数据
+│  ├─ AGENTS.md
+│  ├─ PROJECT.md
+│  ├─ .ai-governance/capability-map.md
 │  └─ docs/templates/
-│     ├─ requirement.md      # 可观察需求和验收标准
-│     ├─ design.md           # 最小且有依据的设计
-│     ├─ task.md             # 当前变更范围和状态
-│     └─ verification.md     # 可复现证据和剩余风险
+│     ├─ requirement.md
+│     ├─ design.md
+│     ├─ task.md
+│     └─ verification.md
 ├─ scripts/
-│  └─ init-project.ps1       # 初始化模板文件
-├─ README.md                 # 中文使用说明
-└─ LICENSE                   # MIT 许可证
+│  └─ init-project.ps1
+├─ README.md
+└─ LICENSE
 ```
-文档按风险启用：
 
-- Low：任务输入和最小检查；
-- Medium：必要的 requirement、design、task 或 verification；
-- High：冻结需求、恢复方案、明确授权和目标证据。
+| 文件 | 作用 |
+|---|---|
+| `SKILL.md` | AI skill 入口和通用工作流 |
+| `agents/openai.yaml` | Codex 的显示名称和默认提示 |
+| `project-template/AGENTS.md` | 复制到项目后持续生效的 AI 开发规则 |
+| `project-template/PROJECT.md` | 项目事实、约束和未知信息 |
+| `capability-map.md` | 已有能力和可复用组件记录 |
+| `docs/templates/` | 需求、设计、任务和验证模板 |
+| `init-project.ps1` | 将治理模板初始化到具体工程 |
 
-不要求每个小改动填写全部文档。
+## 安装
 
-## 边界和责任
+### Codex
 
-AI 负责调查、整理事实、提出最小方案、实现批准范围并记录证据。
+在 Codex 中输入：
 
-维护者负责提供产品意图、确认无法从项目发现的真实事实、批准有风险的变更，以及执行或见证 IDE 构建、烧录和目标板观察。
+```text
+请使用 $skill-installer 从 https://github.com/crichars/embedded-project-governance 安装这个 skill。
+```
 
-没有目标证据时，不能将代码或文档描述为硬件验收完成。这个模板通过规则和记录指导 AI，但不能机械阻止所有违规行为。
+安装后新开会话，使用 `$embedded-project-governance` 调用。
+
+### Claude Code
+
+将仓库克隆到 Claude Code 的个人 skills 目录：
+
+```powershell
+git clone https://github.com/crichars/embedded-project-governance "$HOME\\.claude\\skills\\embedded-project-governance"
+```
+
+然后使用 `/embedded-project-governance` 调用。
+
+### GLM、Kimi、DeepSeek 和其他 AI
+
+这些名称通常指模型，不是统一的 skill 运行平台。能否直接安装和自动调用，取决于运行模型的客户端或编程代理。
+
+如果客户端支持 Agent Skills 开放规范，可按其文档安装本仓库。如果只支持读取文件，可以让 AI 先读取 `SKILL.md`；此时自动触发、脚本执行和项目规则加载取决于客户端能力。普通网页聊天通常只能把 `SKILL.md` 当作提示词参考。
+
+核心 `SKILL.md` 已按 Agent Skills 开放规范编写，并已在 Codex 和 Claude Code 中验证。
+
+## 初始化项目
+
+安装后，让 AI 执行：
+
+```text
+请初始化 C:\\work\\my-firmware，不要覆盖已有文件。
+```
+
+初始化脚本默认保留已有文件。只有明确确认覆盖范围后才允许使用 `-Force`。脚本目前已在 Windows PowerShell 环境验证。
+
+## 边界
+
+- 不替代芯片手册、硬件判断或工程师决策；
+- 不自动完成 IDE 操作、烧录和目标板观察；
+- 没有目标证据时，不把编译通过称为硬件验收完成；
+- skill 提供工作流约束，不是强制安全沙箱。
+
+## License
+
+[MIT](LICENSE)
