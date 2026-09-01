@@ -113,14 +113,6 @@ git clone https://github.com/crichars/embedded-project-governance "$HOME\\.claud
 
 然后使用 `/embedded-project-governance` 调用。
 
-### GLM、Kimi、DeepSeek 和其他 AI
-
-这些名称通常指模型，不是统一的 skill 运行平台。能否直接安装和自动调用，取决于运行模型的客户端或编程代理。
-
-如果客户端支持 Agent Skills 开放规范，可按其文档安装本仓库。如果只支持读取文件，可以让 AI 先读取 `SKILL.md`；此时自动触发、脚本执行和项目规则加载取决于客户端能力。普通网页聊天通常只能把 `SKILL.md` 当作提示词参考。
-
-核心 `SKILL.md` 已按 Agent Skills 开放规范编写，并已在 Codex 和 Claude Code 中验证。
-
 ## 初始化项目
 
 安装后，让 AI 执行：

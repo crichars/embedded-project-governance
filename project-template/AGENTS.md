@@ -40,6 +40,10 @@ Treat `Goal`, `Problem`, and known `Constraints` as the minimum useful fields;
 the other fields may be `UNKNOWN`. Use the structured fields to reduce
 exploration, not to skip investigation.
 
+Treat structured fields in the current user request as the active task. Restate
+them before investigation. Empty or `UNKNOWN` project-template fields do not
+override supplied task input; do not ask again for a field already provided.
+
 ### Mode selection and escalation
 
 - Use simple mode by default when input is sparse or the task is low risk.

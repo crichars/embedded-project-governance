@@ -35,6 +35,10 @@ Do not ask the user to provide facts that can be discovered from the repository
 or authoritative documents. Mark unresolved information as `UNKNOWN` and ask
 only questions that can change the design, risk, or acceptance result.
 
+Treat fields in the current user request as the active task. Restate the parsed
+fields before investigation; an unfilled project template must not erase them.
+Do not ask again for a field the user already provided.
+
 ## Initialize A Project When Requested
 
 When the user explicitly asks to add the governance files to a project, run:
@@ -76,6 +80,10 @@ power/actuator output, and irreversible operations as high risk. Before such an
 operation, confirm the target and range, bound the action, define timeout and
 recovery, and obtain explicit approval. After important failures, verify the
 system is retryable, safe, or explicitly terminal.
+
+For Flash/NVM work, confirm the storage type and layout, target range, erase and
+write granularity and alignment, endurance, integrity or atomicity, power-loss
+recovery, ownership, and target verification method before implementation.
 
 Use the project status ladder:
 
