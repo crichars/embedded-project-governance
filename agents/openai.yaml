@@ -1,0 +1,4 @@
+interface:
+  display_name: "嵌入式项目开发治理"
+  short_description: "让 AI 以最小、受控且可验证的方式参与嵌入式项目开发"
+  default_prompt: "Use $embedded-project-governance to investigate this embedded project first, propose the smallest approved change, and record build, host, target, and residual-risk evidence."
