@@ -27,8 +27,10 @@
 ## 工作流程
 
 ```text
-调查 → 最小方案 → 明确授权 → 实现 → 实际验证 → 记录结果
+调查 → 复用与风险判断 → 最小方案 → 明确授权 → 实现 → 实际验证 → 审查与记录
 ```
+
+开发过程中可按需沉淀项目事实、任务决策和验证结果，便于后续 AI 或开发者接续工作。它支持已有项目，也支持从空目录开始；从零项目应先建立项目基线和第一个可验证切片，不要让 AI 猜测硬件事实。
 
 ## 使用方式
 
@@ -87,7 +89,7 @@ embedded-project-governance/
 | `agents/openai.yaml` | Codex 的显示名称和默认提示 |
 | `project-template/AGENTS.md` | 复制到项目后持续生效的 AI 开发规则 |
 | `project-template/PROJECT.md` | 项目事实、约束和未知信息 |
-| `capability-map.md` | 已有能力和可复用组件记录 |
+| `project-template/.ai-governance/capability-map.md` | 已有能力和可复用组件记录 |
 | `docs/templates/` | 需求、设计、任务和验证模板 |
 | `init-project.ps1` | 将治理模板初始化到具体工程 |
 
@@ -122,6 +124,8 @@ git clone https://github.com/crichars/embedded-project-governance "$HOME\\.claud
 ```
 
 初始化脚本默认保留已有文件。只有明确确认覆盖范围后才允许使用 `-Force`。脚本目前已在 Windows PowerShell 环境验证。
+
+从零项目可以先初始化这些治理文件，再填写 `PROJECT.md` 中的已知事实和 `UNKNOWN` 项，随后让 AI 调查并提出第一阶段目标。已有项目则先读取现有代码、能力地图和构建方式，再决定修改范围。
 
 ## 边界
 
